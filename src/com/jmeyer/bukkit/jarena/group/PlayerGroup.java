@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +23,7 @@ public class PlayerGroup extends Group {
 	 * Create group with predefined list of members
 	 * @param group
 	 */
-	public PlayerGroup(ArrayList<LivingEntity> group) {
+	public PlayerGroup(ArrayList<CraftLivingEntity> group) {
 		super(group);
 		removeUnwantedEntities();
 	}
@@ -33,9 +35,9 @@ public class PlayerGroup extends Group {
 	 * @param new group member
 	 */
 	@Override
-	public void add(LivingEntity le) {
-		if (le instanceof Player) {
-			Player player = (Player)le;
+	public void add(CraftLivingEntity cle) {
+		if (cle instanceof CraftPlayer) {
+			CraftPlayer player = (CraftPlayer)cle;
 			super.add(player);
 		}
 	}
@@ -71,9 +73,9 @@ public class PlayerGroup extends Group {
 	 * @param amount of item to give
 	 */
 	public void giveAllItem(int itemId, int amount) {
-		for (LivingEntity le : super.group)
-			if (le instanceof Player) {
-				Player player = (Player)le;
+		for (CraftLivingEntity cle : super.group)
+			if (cle instanceof CraftPlayer) {
+				CraftPlayer player = (CraftPlayer)cle;
 				player.getWorld().dropItem(player.getLocation(), new ItemStack(itemId, amount, (byte) 0));
 			}
 	}
@@ -83,9 +85,9 @@ public class PlayerGroup extends Group {
 	 * @param message to display
 	 */
 	public void sendMessage(String message) {
-		for (LivingEntity le : super.group)
-			if (le instanceof Player) {
-				Player player = (Player)le;
+		for (CraftLivingEntity cle : super.group)
+			if (cle instanceof Player) {
+				CraftPlayer player = (CraftPlayer)cle;
 				player.sendMessage(ChatColor.RED + "[JArena] " + message);
 			}
 	}
@@ -94,9 +96,9 @@ public class PlayerGroup extends Group {
 	 * Removes all non-Players from group
 	 */
 	public void removeUnwantedEntities() {
-		for (LivingEntity le : super.group)
-			if (!(le instanceof Player)) {
-				remove(le);
+		for (CraftLivingEntity cle : super.group)
+			if (!(cle instanceof Player)) {
+				remove(cle);
 			}
 	}
 	
