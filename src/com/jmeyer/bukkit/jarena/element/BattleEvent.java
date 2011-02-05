@@ -19,17 +19,17 @@ public class BattleEvent {
 	
 	/**
 	 * Create event with given name, players, mobs, and blocks on map
-	 * @param name of event
-	 * @param party of players fighting in event
-	 * @param mobs to be spawned with each round
-	 * @param area on map that will be used as the battle area
+	 * @param name - event name
+	 * @param players - party of players fighting in event
+	 * @param mobs - creatures to be spawned with each round
+	 * @param zone - area on map that will be used as the battle area
 	 */
 	public BattleEvent(String name, PlayerGroup players, ArrayList<MobGroup> mobs, BattleZone zone) {
 		this.name = name;
 		this.players = players;
 		this.mobs = mobs;
 		this.zone = zone;
-		this.round = 1;
+		this.round = 0;
 		start();
 	}
 	
@@ -57,7 +57,7 @@ public class BattleEvent {
 	
 	/**
 	 * Stops event and rewards players if victory considered
-	 * @param whether or not team victorious
+	 * @param victory - whether or not team victorious
 	 */
 	// players victorious - reward, else nothing
 	public void stop(boolean victory) {
@@ -75,11 +75,11 @@ public class BattleEvent {
 		if (hasNextRound()) {
 			zone.clear();
 			players.giveAllItem(Material.DIRT, 5);
-			// spawn mobs
 			round++;
+			// spawn mobs
 			sendMessageToParty("Round " + round);
 		} else
-			stop();
+			stop(true);
 	}
 	
 	/**
