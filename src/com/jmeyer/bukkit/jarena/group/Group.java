@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.entity.CraftLivingEntity;
-import org.bukkit.entity.LivingEntity;
 
 /**
  * Outlines basic commands for entity groups.
@@ -39,8 +38,8 @@ public class Group {
 	public int numAlive() { 
 		int total = 0;
 		
-		for (CraftLivingEntity ce : group)
-			if (ce.getHealth() > 0)
+		for (CraftLivingEntity cle : group)
+			if (cle.getHealth() > 0)
 				total++;
 		
 		return total; 
@@ -50,8 +49,8 @@ public class Group {
 	 * Kill all entities in the group.
 	 */
 	public void killAll() {
-		for (LivingEntity le : group)
-			le.setHealth(0);
+		for (CraftLivingEntity cle : group)
+			cle.setHealth(0);
 	}
 	
 	/**
@@ -59,24 +58,24 @@ public class Group {
 	 * @param location to tp to
 	 */
 	public void tpAll(Location loc) {
-		for (LivingEntity le : group)
-			le.teleportTo(loc);
+		for (CraftLivingEntity cle : group)
+			cle.teleportTo(loc);
 	}
 	
 	/** 
 	 * Add new LivingEntity to group
 	 * @param new group member
 	 */
-	public void add(CraftLivingEntity le) {
-		group.add(le);
+	public void add(CraftLivingEntity cle) {
+		group.add(cle);
 	}
 	
 	/**
 	 * Remove LivingEntity from group
 	 * @param rejected group member
 	 */
-	public void remove(CraftLivingEntity le) {
-		group.remove(le);
+	public void remove(CraftLivingEntity cle) {
+		group.remove(cle);
 	}
 	
 	/**
