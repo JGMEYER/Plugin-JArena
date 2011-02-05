@@ -1,0 +1,3 @@
+name: JArena
+main: com.jmeyer.bukkit.jarena.JArenaPlugin
+version: 0.1
