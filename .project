@@ -3,6 +3,7 @@
 	<name>JArena</name>
 	<comment></comment>
 	<projects>
+		<project>craftbukkit</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
