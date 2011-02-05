@@ -3,7 +3,6 @@ package com.jmeyer.bukkit.jarena.group;
 import java.util.ArrayList;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
 
