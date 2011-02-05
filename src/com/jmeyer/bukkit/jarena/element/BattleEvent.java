@@ -4,12 +4,15 @@ import java.util.ArrayList;
 
 import org.bukkit.Material;
 
+import com.jmeyer.bukkit.jarena.JArenaPlugin;
 import com.jmeyer.bukkit.jarena.group.MobGroup;
 import com.jmeyer.bukkit.jarena.group.PlayerGroup;
 
 public class BattleEvent {
 
 	// TODO: add rewards to be given after each round
+	private final JArenaPlugin plugin;
+	
 	private String name;
 	private PlayerGroup players;
 	private ArrayList<MobGroup> mobs;
@@ -24,7 +27,8 @@ public class BattleEvent {
 	 * @param mobs - creatures to be spawned with each round
 	 * @param zone - area on map that will be used as the battle area
 	 */
-	public BattleEvent(String name, PlayerGroup players, ArrayList<MobGroup> mobs, BattleZone zone) {
+	public BattleEvent(JArenaPlugin plugin, String name, PlayerGroup players, ArrayList<MobGroup> mobs, BattleZone zone) {
+		this.plugin = plugin;
 		this.name = name;
 		this.players = players;
 		this.mobs = mobs;
