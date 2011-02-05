@@ -3,6 +3,8 @@ package com.jmeyer.bukkit.jarena.group;
 import java.util.ArrayList;
 
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.entity.CraftEntity;
+import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
 
 /**
@@ -12,20 +14,20 @@ import org.bukkit.entity.LivingEntity;
 public class Group {
 
 	// TODO: should this really be just a class? - (interface, abstract?)
-	ArrayList<LivingEntity> group;
+	ArrayList<CraftLivingEntity> group;
 	
 	/**
 	 * Instantiate new group with empty list.
 	 */
 	public Group() {
-		this.group = new ArrayList<LivingEntity>();
+		this.group = new ArrayList<CraftLivingEntity>();
 	}
 	
 	/**
 	 * Instantiate new group with given list.
 	 * @param list of LivingEntitys in group
 	 */	
-	public Group(ArrayList<LivingEntity> group) {
+	public Group(ArrayList<CraftLivingEntity> group) {
 		this.group = group;
 	}
 	
@@ -38,8 +40,8 @@ public class Group {
 	public int numAlive() { 
 		int total = 0;
 		
-		for (LivingEntity le : group)
-			if (le.getHealth() > 0)
+		for (CraftLivingEntity ce : group)
+			if (ce.getHealth() > 0)
 				total++;
 		
 		return total; 
@@ -66,7 +68,7 @@ public class Group {
 	 * Add new LivingEntity to group
 	 * @param new group member
 	 */
-	public void add(LivingEntity le) {
+	public void add(CraftLivingEntity le) {
 		group.add(le);
 	}
 	
@@ -74,7 +76,7 @@ public class Group {
 	 * Remove LivingEntity from group
 	 * @param rejected group member
 	 */
-	public void remove(LivingEntity le) {
+	public void remove(CraftLivingEntity le) {
 		group.remove(le);
 	}
 	
