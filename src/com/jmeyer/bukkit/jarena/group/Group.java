@@ -1,8 +1,11 @@
 package com.jmeyer.bukkit.jarena.group;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 
 /**
@@ -11,6 +14,7 @@ import org.bukkit.craftbukkit.entity.CraftLivingEntity;
  **/
 public class Group {
 
+	protected static final Logger LOG = Logger.getLogger("Minecraft");
 	// TODO: should this really be just a class? - (interface, abstract?)
 	ArrayList<CraftLivingEntity> group;
 	
@@ -82,5 +86,35 @@ public class Group {
 	 * Removes all entities that do not belong in group
 	 */
 	public void removeUnwantedEntities() {}
+	
+	
+	
+	/**
+	 * Returns a random location within the boundaries given
+	 * @param world - world where location exists
+	 * @param xMin - min x of volume
+	 * @param xMax - max x of volume
+	 * @param yMin - min y of volume
+	 * @param yMax - max y of volume
+	 * @param zMin - min z of volume
+	 * @param zMax - max z of volume
+	 * @return new location within given parameters
+	 */
+	protected Location randomLocation(World world, double xMin, double xMax, double yMin, 
+			double yMax, double zMin, double zMax) {
+		double x, y, z;
+		
+		if ((xMin > xMax) || (yMin > yMax) || (zMin > zMax)) {
+			LOG.log(Level.SEVERE, "[JArena] Could not generate random location, " + 
+					"coordinates invalid.");
+			return null;
+		} else {
+			x = (Math.random()*xMin) + (xMax-xMin);
+			y = (Math.random()*yMin) + (yMax-yMin);
+			z = (Math.random()*zMin) + (zMax-zMin);
+		}
+		
+		return new Location(world, x, y, z);
+	}
 	
 }
