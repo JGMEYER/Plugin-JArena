@@ -25,11 +25,6 @@ public interface Group {
 	 */
 	public void tpAll(Location loc);
 	
-	/**
-	 * Removes all entities that do not belong in group
-	 */
-	public void removeUnwantedMembers();
-	
 	
 	
 	// TODO: Move to own class
