@@ -3,43 +3,45 @@ package com.jmeyer.bukkit.jarena.group;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerGroup extends Group {
+public class PlayerGroup implements Group {
 
+	private ArrayList<Player> group;
+	
 	/**
 	 * Create group with an empty list of members
 	 */
 	public PlayerGroup() {
-		super();
+		this.group = new ArrayList<Player>();
 	}
 	
 	/**
 	 * Create group with predefined list of members
 	 * @param group
 	 */
-	public PlayerGroup(ArrayList<CraftLivingEntity> group) {
-		super(group);
-		removeUnwantedEntities();
+	public PlayerGroup(ArrayList<Player> group) {
+		this.group = group;
 	}
-	
-	
 	
 	/** 
 	 * Add new Player to group
 	 * @param new group member
 	 */
-	@Override
-	public void add(CraftLivingEntity cle) {
-		if (cle instanceof CraftPlayer) {
-			CraftPlayer player = (CraftPlayer)cle;
-			super.add(player);
-		}
+	public void add(Player player) {
+		this.group.add(player);
+	}
+	
+	/** 
+	 * Remove player from group
+	 * @param new group member
+	 */
+	public void remove(Player player) {
+		if (this.group.indexOf(player) > -1)
+			this.group.remove(player);
 	}
 	
 	/**
@@ -73,11 +75,8 @@ public class PlayerGroup extends Group {
 	 * @param amount of item to give
 	 */
 	public void giveAllItem(int itemId, int amount) {
-		for (CraftLivingEntity cle : super.group)
-			if (cle instanceof CraftPlayer) {
-				CraftPlayer player = (CraftPlayer)cle;
-				player.getWorld().dropItem(player.getLocation(), new ItemStack(itemId, amount, (byte) 0));
-			}
+		for (Player player : this.group)
+			player.getWorld().dropItem(player.getLocation(), new ItemStack(itemId, amount, (byte) 0));
 	}
 	
 	/**
@@ -85,21 +84,42 @@ public class PlayerGroup extends Group {
 	 * @param message to display
 	 */
 	public void sendMessage(String message) {
-		for (CraftLivingEntity cle : super.group)
-			if (cle instanceof Player) {
-				CraftPlayer player = (CraftPlayer)cle;
-				player.sendMessage(ChatColor.RED + "[JArena] " + message);
-			}
+		for (Player player : this.group)
+			player.sendMessage(ChatColor.RED + "[JArena] " + message);
 	}
-	
-	/**
-	 * Removes all non-Players from group
+
+	/** 
+	 * Return the total number of living players in the group. 
+	 * @return number alive
 	 */
-	public void removeUnwantedEntities() {
-		for (CraftLivingEntity cle : super.group)
-			if (!(cle instanceof Player)) {
-				remove(cle);
-			}
+	@Override
+	public int numAlive() {
+		int total = 0;
+		
+		for (Player player : this.group)
+			if (player.getHealth() < 0)
+				++total;
+		
+		return total;
+	}
+
+	/**
+	 * Kills all players in group
+	 */
+	@Override
+	public void killAll() {
+		for (Player player : this.group)
+			player.setHealth(0);
+	}
+
+	/**
+	 * Teleports all players to given location
+	 * @param loc - Location to teleport to
+	 */
+	@Override
+	public void tpAll(Location loc) {
+		for (Player player : this.group)
+			player.teleportTo(loc);
 	}
 	
 }
