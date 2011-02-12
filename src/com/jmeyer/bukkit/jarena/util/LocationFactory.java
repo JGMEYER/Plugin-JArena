@@ -60,9 +60,9 @@ public class LocationFactory {
 			z2 = temp;				
 		}
 		
-		x = (Math.random()*x1) + (x2-x1);
-		y = (Math.random()*y1) + (y2-y1);
-		z = (Math.random()*z1) + (z2-z1);
+		x = (Math.random()*(x2-x1)) + x1;
+		y = (Math.random()*(y2-y1)) + y1;
+		z = (Math.random()*(z2-z1)) + z1;
 		
 		return new Location(world, x, y, z);
 	}
