@@ -24,11 +24,9 @@ public class DatabaseManager {
 		return getResultSet(dbPath, tableFrom, null, 0);
 	}
 	
-	
 	public static ResultSet getResultSet(String dbPath, String tableFrom, String condition) {
 		return getResultSet(dbPath, tableFrom, condition, 0);
 	}
-	
 	
 	public static ResultSet getResultSet(String dbPath, String tableFrom, String condition, int limit) {
 		Connection conn = null;
@@ -72,7 +70,6 @@ public class DatabaseManager {
 			}
 		}
 	}
-	
 	
 	public static void runUpdate(String dbPath, String update) {
 		Connection conn = null;
