@@ -10,11 +10,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.entity.CraftLivingEntity;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
@@ -25,7 +24,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.jmeyer.bukkit.jarena.element.BattleEvent;
 import com.jmeyer.bukkit.jarena.element.BattleZone;
-import com.jmeyer.bukkit.jarena.group.Mob;
 import com.jmeyer.bukkit.jarena.group.MobGroup;
 import com.jmeyer.bukkit.jarena.group.PlayerGroup;
 import com.jmeyer.bukkit.jarena.listener.JArenaBlockListener;
@@ -84,30 +82,30 @@ public class JArenaPlugin extends JavaPlugin {
 		List<World> worlds = this.getServer().getWorlds();
 		PlayerGroup pg = new PlayerGroup();
 		MobGroup mg1 = new MobGroup();
-		  mg1.add(Mob.SKELETON);
-		  mg1.add(Mob.COW);
-		  mg1.add(Mob.COW);
-		  mg1.add(Mob.COW);
+		  mg1.add(CreatureType.SKELETON);
+		  mg1.add(CreatureType.COW);
+		  mg1.add(CreatureType.COW);
+		  mg1.add(CreatureType.COW);
 		MobGroup mg2 = new MobGroup();
-		  mg2.add(Mob.SKELETON);
-		  mg2.add(Mob.ZOMBIE);
-		  mg2.add(Mob.ZOMBIE);
+		  mg2.add(CreatureType.SKELETON);
+		  mg2.add(CreatureType.ZOMBIE);
+		  mg2.add(CreatureType.ZOMBIE);
 		MobGroup mg3 = new MobGroup();
-		  mg3.add(Mob.SKELETON);
-		  mg3.add(Mob.SKELETON);
-		  mg3.add(Mob.ZOMBIE);
-		  mg3.add(Mob.ZOMBIE);
+		  mg3.add(CreatureType.SKELETON);
+		  mg3.add(CreatureType.SKELETON);
+		  mg3.add(CreatureType.ZOMBIE);
+		  mg3.add(CreatureType.ZOMBIE);
 		MobGroup mg4 = new MobGroup();
-		  mg4.add(Mob.SKELETON);
-		  mg4.add(Mob.SKELETON);
-		  mg4.add(Mob.SKELETON);
-		  mg4.add(Mob.SPIDER);
+		  mg4.add(CreatureType.SKELETON);
+		  mg4.add(CreatureType.SKELETON);
+		  mg4.add(CreatureType.SKELETON);
+		  mg4.add(CreatureType.SPIDER);
 		MobGroup mg5 = new MobGroup();
-		  mg5.add(Mob.SPIDER);
-		  mg5.add(Mob.SKELETON);
-		  mg5.add(Mob.SKELETON);
-		  mg5.add(Mob.ZOMBIE);
-		  mg5.add(Mob.ZOMBIE);
+		  mg5.add(CreatureType.SPIDER);
+		  mg5.add(CreatureType.SKELETON);
+		  mg5.add(CreatureType.SKELETON);
+		  mg5.add(CreatureType.ZOMBIE);
+		  mg5.add(CreatureType.ZOMBIE);
 		ArrayList<MobGroup> mgs = new ArrayList<MobGroup>();
 		  mgs.add(mg1);
 		  mgs.add(mg2);
@@ -145,59 +143,13 @@ public class JArenaPlugin extends JavaPlugin {
 		String[] trimmedArgs = args;
         String commandName = command.getName().toLowerCase();
         
-        if (commandName.equals("spawntest")) {
-        	return testSpawn(sender, trimmedArgs);
-        } else if (commandName.equals("killall")) {
-        	return killAll(sender, trimmedArgs);
-        } else if (commandName.equals("addme")) {
+        if (commandName.equals("addme")) {
         	return addPlayer(sender, trimmedArgs);
         } else if (commandName.equals("starttest")) {
         	return startTest(sender, trimmedArgs);
         }
         
         return false;
-	}
-	
-	/**
-	 * A test command to spawn a MobGroup
-	 * @param sender
-	 * @param trimmedArgs
-	 * @return
-	 */
-	public boolean testSpawn(CommandSender sender, String[] trimmedArgs) {
-		if (sender instanceof Player) {
-			Player player = (Player) sender;
-
-			ArrayList<Mob> group = new ArrayList<Mob>();
-			Mob mob1 = Mob.fromName(capitalCase("Sheep"));
-			Mob mob2 = Mob.fromName(capitalCase("Chicken"));
-			
-			group.add(mob1);
-			group.add(mob2);
-			
-			MobGroup mg = new MobGroup(group);
-			mg.spawnAll(this, player, (CraftWorld)player.getWorld(), player.getLocation());
-			mobGroups.add(mg);
-    		return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * A test command to kill off all spawned MobGroups
-	 * @param sender
-	 * @param trimmedArgs
-	 * @return
-	 */
-	public boolean killAll(CommandSender sender, String[] trimmedArgs) {
-		if (sender instanceof Player) {
-			for (MobGroup mg : mobGroups) {
-				mg.killAll();
-			}
-			
-			return true;
-		}
-		return false;
 	}
 	
 	// TODO: make it take a string as a parameter to correspond to BattleEvent name
@@ -248,12 +200,12 @@ public class JArenaPlugin extends JavaPlugin {
         DEBUGEES.put(player, value);
     }
 
-    public BattleEvent findBattleEventWith(CraftLivingEntity cle) {
+    public BattleEvent findBattleEventWith(Creature cr) {
     	for (BattleEvent be : battles) {
     		ArrayList<MobGroup> mobGroups = be.getMobGroups();
     		
     		for (MobGroup mg : mobGroups)
-    			if (mg.getSpawned().indexOf(cle) >= 0)
+    			if (mg.getSpawned().indexOf(cr) >= 0)
     				return be;
     	}
     	
@@ -269,11 +221,11 @@ public class JArenaPlugin extends JavaPlugin {
     	return null;
     }
     
-    public boolean isLastMobInRoundOfEvent(CraftLivingEntity cle, BattleEvent be) {
+    public boolean isLastMobInRoundOfEvent(Creature cr, BattleEvent be) {
     	MobGroup mg = be.getMobGroups().get(be.getRound()-1);
-    	ArrayList<CraftLivingEntity> spawned = mg.getSpawned();
+    	ArrayList<Creature> spawned = mg.getSpawned();
     	
-    	if (spawned.indexOf(cle) >= 0)
+    	if (spawned.indexOf(cr) >= 0)
     		if (spawned.size() <= 1)
     			return true;
     	
