@@ -1,6 +1,7 @@
 package com.jmeyer.bukkit.jarena.listener;
 
 import org.bukkit.craftbukkit.entity.CraftLivingEntity;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
@@ -22,15 +23,22 @@ public class JArenaEntityListener extends EntityListener {
     	
     	if (entity instanceof CraftLivingEntity) {
     		CraftLivingEntity cle = (CraftLivingEntity)entity;
-    		BattleEvent be = plugin.findBattleEventWith(cle);
+    		Creature cr = null;
+    		BattleEvent be = null;
     		
-    		if (be != null) {
-    			boolean last = plugin.isLastMobInRoundOfEvent(cle, be);
-    			be.getMobGroups().get(be.getRound()-1).remove(cle);
+    		if (cle instanceof Creature) {
+    			cr = (Creature)cle;
+    			be = plugin.findBattleEventWith(cr);
     			
-    			if (last)
-    				be.startNextRound();
+    			if (be != null) {
+    				boolean last = plugin.isLastMobInRoundOfEvent(cr, be);
+    				be.getMobGroups().get(be.getRound()-1).remove(cr);
+        			
+        			if (last)
+        				be.startNextRound();
+        		}
     		}
+    		
     	}
     }
 	
