@@ -97,7 +97,7 @@ public class PlayerGroup implements Group {
 		int total = 0;
 		
 		for (Player player : this.group)
-			if (player.getHealth() < 0)
+			if (player.getHealth() > 0)
 				++total;
 		
 		return total;
@@ -120,6 +120,14 @@ public class PlayerGroup implements Group {
 	public void tpAll(Location loc) {
 		for (Player player : this.group)
 			player.teleportTo(loc);
+	}
+	
+	/**
+	 * Returns ArrayList of Players in group
+	 * @return group
+	 */
+	public ArrayList<Player> getPlayerGroup() {
+		return group;
 	}
 	
 }

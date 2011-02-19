@@ -1,26 +1,21 @@
 package com.jmeyer.bukkit.jarena.element;
 
-import java.util.ArrayList;
+import org.bukkit.Location;
 
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-
-public class BattleZone {
+public class BattleZone extends BattleVolume {
 
 	private String name;
-	private ArrayList<Block> blocks;
 	
 	/**
-	 * Create BattleZone <name> with list of blocks in contained area
-	 * @param name of BattleZone
-	 * @param list of blocks in battle area
+	 * Creates a BattleZone with given name and corner dimensions
+	 * @param name
+	 * @param loc1
+	 * @param loc2
 	 */
-	public BattleZone (String name, ArrayList<Block> blocks) {
+	public BattleZone (String name, Location loc1, Location loc2) {
+		super(loc1, loc2);
 		this.name = name;
-		this.blocks = blocks;
 	}
-	
-	
 	
 	/**
 	 * Gets name of BattleZone
@@ -28,24 +23,6 @@ public class BattleZone {
 	 */
 	public String getName() {
 		return name;
-	}
-	
-	
-	
-	/**
-	 * Clear BattleZone playing area
-	 */
-	public void clear() {
-		for (Block block : blocks)
-			block.setType(Material.AIR);
-	}
-	
-	/**
-	 * Add Block to the designated playing area list
-	 * @param Block to add
-	 */
-	public void add(Block block) {
-		blocks.add(block);
 	}
 	
 }

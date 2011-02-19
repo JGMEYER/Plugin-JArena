@@ -16,7 +16,8 @@ public class LocationFactory {
 	 * @param loc2
 	 * @return
 	 */
-	public static Location randomLocation(World world, Location loc1, Location loc2) {
+	public static Location randomLocation(Location loc1, Location loc2) {
+		World world = loc1.getWorld();
 		double x1 = loc1.getX();
 		double x2 = loc2.getX();
 		double y1 = loc1.getY();

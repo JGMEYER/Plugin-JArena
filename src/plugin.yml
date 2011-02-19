@@ -1,3 +1,20 @@
 name: JArena
 main: com.jmeyer.bukkit.jarena.JArenaPlugin
 version: 0.1
+author: JMEYER
+description: >
+             A fun round and party-based battle system for minecraft smp
+             
+commands:
+  spawntest:
+    description: (Debug) Tests spawning code for system
+    usage: /<command>
+  killall:
+    description: (Debug) Kills all spawned mobs for system
+    usage: /<command>
+  addme:
+    description: (Debug) Adds player to test BattleEvent 
+    usage: /<command>
+  starttest:
+    description: (Debug) Begins test BattleEvent
+    usage: /<command>
