@@ -9,6 +9,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftLivingEntity;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 
 import com.jmeyer.bukkit.jarena.JArenaPlugin;
@@ -126,16 +128,20 @@ public class BattleEvent {
 		Location loc1 = this.zone.getSouthWestBottom().getLocation(); // TODO: change to within boundaries of this.zone
 		Location loc2 = this.zone.getNorthEastBottom().getLocation(); // TODO: change to within boundaries of this.zone
 		
-		this.mobGroups.get(round-1).spawnAllScattered(this.plugin, player, cWorld, loc1, loc2);
+		// this.mobGroups.get(round-1).spawnAllScattered(this.plugin, player, cWorld, loc1, loc2);
+		this.mobGroups.get(round-1).spawnAllScattered(player, loc1, loc2);
 	}
 	
 	public void killMobWave(int round) {
 		MobGroup mg = this.mobGroups.get(round-1);
-		ArrayList<CraftLivingEntity> clesToKill = mg.getSpawned();
+		// ArrayList<CraftLivingEntity> clesToKill = mg.getSpawned();
+		ArrayList<Creature> crsToKill = mg.getSpawned();
 		
 		mg.disownSpawned();
-		for (CraftLivingEntity cle : clesToKill) {
-			cle.setHealth(0);
+		// for (CraftLivingEntity cle : clesToKill) {
+		for (Creature cr : crsToKill) {
+			// cle.setHealth(0);
+			cr.setHealth(0);
 		}
 	}
 	
@@ -217,8 +223,10 @@ public class BattleEvent {
 		ret += "MaxPlayers:  " + this.maxPlayers + "\n";
 		ret += "MobGroups: \n";
 		for (int i = 0; i < this.mobGroups.size(); i++) {
-			for (Mob mob : this.mobGroups.get(i).getMobs())
-				ret += "  " + (i+1) + ") " + mob.name + "\n";
+			// for (Mob mob : this.mobGroups.get(i).getMobs())
+			for (CreatureType ct : this.mobGroups.get(i).getCreatureTypes())
+				// ret += "  " + (i+1) + ") " + mob.name + "\n";
+				ret += "  " + (i+1) + ") " + ct.getName() + "\n";
 			ret += "\n";
 		}
 		return ret;
