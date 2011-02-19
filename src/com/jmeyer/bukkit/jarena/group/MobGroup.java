@@ -3,62 +3,60 @@ package com.jmeyer.bukkit.jarena.group;
 
 import java.util.ArrayList;
 
-import net.minecraft.server.World;
-
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.entity.CraftEntity;
-import org.bukkit.craftbukkit.entity.CraftLivingEntity;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 
-import com.jmeyer.bukkit.jarena.JArenaPlugin;
 import com.jmeyer.bukkit.jarena.group.Mob.MobException;
 import com.jmeyer.bukkit.jarena.util.LocationFactory;
 
 public class MobGroup implements Group {
 
-	private ArrayList<Mob> group;
-	private ArrayList<CraftLivingEntity> spawned;
+	private ArrayList<CreatureType> group;
+	private ArrayList<Creature> spawned;
 	
 	/**
 	 * Create group with an empty list of mobs
 	 */
 	public MobGroup() {
-		this(new ArrayList<Mob>());
+		this(new ArrayList<CreatureType>());
 	}
 	
 	/**
 	 * Create group with predefined list of members
 	 * @param group
 	 */
-	public MobGroup(ArrayList<Mob> group) {
+	public MobGroup(ArrayList<CreatureType> group) {
 		this.group = group;
-		this.spawned = new ArrayList<CraftLivingEntity>();
+		this.spawned = new ArrayList<Creature>();
 	}
 	
 	/** 
 	 * Add new mob to group
 	 * @param mob - new group member
 	 */
-	public void add(Mob mob) {
-		this.group.add(mob);
+	public void add (CreatureType ct) {
+		if (ct != null)
+			this.group.add(ct);
 	}
 	
 	/**
 	 * Remove mob from group
 	 * @param mob - member to remove
 	 */
-	public void remove(Mob mob) {
-		if (this.group.indexOf(mob) > -1)
-			this.group.remove(mob);
+	public void remove(CreatureType ct) {
+		if (this.group.indexOf(ct) > -1)
+			this.group.remove(ct);
 	}
 	
 	/**
 	 * Kill and remove spawned creature from group
 	 */
-	public void remove(CraftLivingEntity cle) {
-		if (this.spawned.indexOf(cle) > -1)
-			this.spawned.remove(cle);
+	public void remove(Creature cr) {
+		if (this.spawned.indexOf(cr) > -1)
+			this.spawned.remove(cr);
 	}
 	
 	/**
@@ -69,11 +67,11 @@ public class MobGroup implements Group {
 	 * @param loc - location to spawn mobs
 	 * @throws MobException 
 	 */
-	public void spawnAll(JArenaPlugin plugin, Player player, CraftWorld cWorld, Location loc) {
+	public void spawnAllFixed(Player player, Location loc) {
 		double x = loc.getX();
 		double y = loc.getY();
 		double z = loc.getZ();
-		spawnAllScattered(plugin, player, cWorld, x, x, y, y, z, z);
+		spawnAllScattered(player, x, x, y, y, z, z);
 	}
 	
 	/**
@@ -84,14 +82,14 @@ public class MobGroup implements Group {
 	 * @param loc1 - first corner of volume
 	 * @param loc2 - second corner of volume
 	 */
-	public void spawnAllScattered(JArenaPlugin plugin, Player player, CraftWorld cWorld, Location loc1, Location loc2) {
+	public void spawnAllScattered(Player player, Location loc1, Location loc2) {
 		double x1 = loc1.getX();
 		double y1 = loc1.getY();
 		double z1 = loc1.getZ();
 		double x2 = loc2.getX();
 		double y2 = loc2.getY();
 		double z2 = loc2.getZ();
-		spawnAllScattered(plugin, player, cWorld, x1, x2, y1, y2, z1, z2);
+		spawnAllScattered(player, x1, x2, y1, y2, z1, z2);
 	}
 	
 	/**
@@ -106,25 +104,16 @@ public class MobGroup implements Group {
 	 * @param z1 - min z of volume
 	 * @param z2 - max z of volume
 	 */
-	public void spawnAllScattered(JArenaPlugin plugin, Player player, CraftWorld cWorld, 
-			double x1, double x2, double y1, double y2, double z1, double z2) {
+	public void spawnAllScattered(Player player, double x1, double x2, double y1, double y2, 
+			double z1, double z2) {
+		
+		CraftWorld cWorld = (org.bukkit.craftbukkit.CraftWorld)player.getWorld();
 
-		World world = ((org.bukkit.craftbukkit.CraftWorld)player.getWorld()).getHandle();
-
-		for (Mob mob : group) {	
+		for (CreatureType ct : this.group) {
 			Location loc = LocationFactory.randomLocation(cWorld, x1, x2, y1, y2, z1, z2);
-			CraftEntity newSpawn = null;
 			
-			try {
-				newSpawn = mob.spawn(player, plugin);
-				newSpawn.teleportTo(loc);
-				world.a(newSpawn.getHandle());
-				
-				if (this.spawned.indexOf((CraftLivingEntity)newSpawn) < 0)
-					this.spawned.add((CraftLivingEntity)newSpawn);
-			} catch (MobException e) {
-				e.printStackTrace();
-			}
+			Creature spawn = cWorld.spawnCreature(loc, ct);
+			this.spawned.add(spawn);				
 		}
 	}
 
@@ -136,8 +125,8 @@ public class MobGroup implements Group {
 	public int numAlive() {
 		int total = 0;
 		
-		for (CraftLivingEntity cle : spawned)
-			if (cle.getHealth() < 0)
+		for (Creature cr : this.spawned)
+			if (cr.getHealth() < 0)
 				++total;
 		
 		return total;
@@ -148,9 +137,9 @@ public class MobGroup implements Group {
 	 */
 	@Override
 	public void killAll() {
-		for (CraftLivingEntity cle : this.spawned) {
-			cle.setHealth(0); // TODO: remove spawned mob afterwards
-			spawned.remove(cle);
+		for (Creature cr : this.spawned) {
+			cr.setHealth(0);
+			this.spawned.remove(cr);
 		}
 	}
 
@@ -160,20 +149,20 @@ public class MobGroup implements Group {
 	 */
 	@Override
 	public void tpAll(Location loc) {
-		for (CraftLivingEntity cle : this.spawned)
-			cle.teleportTo(loc);
+		for (Creature cr : this.spawned)
+			cr.teleportTo(loc);
 	}
 	
-	public ArrayList<Mob> getMobs() {
+	public ArrayList<CreatureType> getCreatureTypes() {
 		return group;
 	}
 	
-	public ArrayList<CraftLivingEntity> getSpawned() {
+	public ArrayList<Creature> getSpawned() {
 		return spawned;
 	}
 	
 	public void disownSpawned() {
-		spawned = new ArrayList<CraftLivingEntity>();
+		spawned = new ArrayList<Creature>();
 	}
 	
 }
