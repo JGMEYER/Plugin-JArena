@@ -34,8 +34,11 @@ public class JArenaEntityListener extends EntityListener {
     				boolean last = plugin.isLastMobInRoundOfEvent(cr, be);
     				be.getMobGroups().get(be.getRound()-1).remove(cr);
         			
-        			if (last)
-        				be.startNextRound();
+        			if (last) {
+        				// Start next round in 20 seconds (20 ticks/sec)
+        				be.sendMessageToParty("Next round will start in 20 seconds.");
+        				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, be, 400);
+        			}
         		}
     		}
     		
