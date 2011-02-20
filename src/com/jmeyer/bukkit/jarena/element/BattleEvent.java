@@ -19,8 +19,9 @@ import com.jmeyer.bukkit.jarena.group.MobGroup;
 import com.jmeyer.bukkit.jarena.group.PlayerGroup;
 import com.jmeyer.bukkit.jarena.util.LocationFactory;
 
-public class BattleEvent {
+public class BattleEvent implements Runnable {
 
+	// TODO: add comments and organize methods
 	// TODO: add rewards to be given after each round
 	private final JArenaPlugin plugin;
 	private Logger log;
@@ -223,5 +224,10 @@ public class BattleEvent {
 			ret += "\n";
 		}
 		return ret;
+	}
+	
+	@Override
+	public void run() {
+		startNextRound();
 	}
 }
