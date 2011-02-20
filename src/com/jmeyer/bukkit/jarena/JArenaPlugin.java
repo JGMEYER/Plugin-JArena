@@ -48,21 +48,6 @@ public class JArenaPlugin extends JavaPlugin {
 	public static ArrayList<MobGroup> mobGroups;
 	
 	/**
-     * Create instance of JArena Plugin
-     * @param pluginLoader
-     * @param instance
-     * @param desc
-     * @param folder
-     * @param plugin
-     * @param cLoader
-     */	
-	public JArenaPlugin(PluginLoader pluginLoader, Server instance, 
-			PluginDescriptionFile desc, File folder, File plugin, 
-			ClassLoader cLoader) {
-		super(pluginLoader, instance, desc, folder, plugin, cLoader);
-	}
-	
-	/**
 	 * Step through preliminary setup when plugin enabled
 	 */
 	@Override
