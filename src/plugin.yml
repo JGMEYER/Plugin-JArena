@@ -6,15 +6,25 @@ description: >
              A fun round and party-based battle system for minecraft smp
              
 commands:
-  spawntest:
-    description: (Debug) Tests spawning code for system
-    usage: /<command>
-  killall:
-    description: (Debug) Kills all spawned mobs for system
-    usage: /<command>
   addme:
     description: (Debug) Adds player to test BattleEvent 
     usage: /<command>
   starttest:
     description: (Debug) Begins test BattleEvent
     usage: /<command>
+  jarena:
+    description: Handles all commands for plugin
+    usage: |
+           /<command> <action> [parameters]
+           Example: /<command> join test - adds player to party in queue to start Test event
+           Example: /<command> leave - expels player from current party
+           Example: /<command> partychat - toggles party chat
+           Example: /<command> makeleader jmeyer - makes JMEYER party leader (can only be used by current leader)
+           Example: /<command> playerinfo jmeyer - displays JMEYER's event status
+           Example: /<command> eventinfo test - displays information on Test event
+           Example: /<command> j test - adds player to party in queue to start Test event
+           Example: /<command> l - expels player from current party
+           Example: /<command> pc - toggles party chat
+           Example: /<command> ml jmeyer - makes JMEYER party leader (can only be used by current leader)
+           Example: /<command> pi jmeyer - displays JMEYER's event status
+           Example: /<command> ei test - displays information on Test event
